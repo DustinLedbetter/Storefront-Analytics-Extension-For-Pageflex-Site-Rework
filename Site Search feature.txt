@@ -1,0 +1,57 @@
+***************************************************
+*GOD first                                        *
+*Name: Dustin Ledbetter                           *
+*Start Date: 12-27-2018                           *
+*Purpose: To take what the user searches for on a *
+*         pageflex storefront and send it to      *
+*         google analytics site search feature    *
+*************************************************** 
+
+This is part of the process after you setup site search on the google analytics website to look for search term q from the pages
+ ---------------------------------------------------------------------------------------------------------------
+ 
+First I added this piece to the header on the UserContentStart.ASPX page:
+ 
+// Google Analytics -->
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'nulled for security', 'auto');
+ga('send', 'pageview');
+//End Google Analytics -->
+ 
+---------------------------------------------------------------------------------------------------------------
+
+I then added this piece to the body section AFTER the textbox and search button are created:
+ 
+<!--Script to add the search test to url at top of page for google analytics site search feature-->
+<script type="text/javascript">
+
+    // Get the original url for safety and to prevent duplication of search later
+    var loc = location.href 
+
+    // Find all of the input fields
+    var inputs = document.getElementsByTagName('input');
+    //console.log(inputs);
+
+    // Search to find the input field we need
+    for (var i = 0; i < inputs.length; i++)
+    {  
+        if (inputs[i].id == "txtSearch") {
+            //console.log(inputs[i].value);
+
+            // Check to make sure it isn't blank or null first
+            if (inputs[i].value != null && inputs[i].value != "")
+            {    
+                // This part sends the url to google analytics WITH the search parameter and delimeter added allowing search site feature to pick up the words correctly
+                ga('send', 'pageview', 'https://www.nulled for security.aspx?q=' + inputs[i].value);
+              
+                // Add the search text to the url with the delimeter needed for google site search
+                //$("#btnSearch").click([window.history.pushState(loc, "new url", loc + "?q=" + inputs[i].value)]);
+            }
+        }
+    };
+
+</script>
